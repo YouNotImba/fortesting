@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+
+</h:head>
+<body>
+	<h:outputStylesheet name="css/main.css"></h:outputStylesheet>
+	<p:growl id="messages"></p:growl>
+	<h:form id="addNew" enctype="multipart/form-data">
+		<p:fieldset>
+			<h:panelGrid columns="2">
+				<h:column>
+					<p:outputLabel value="Title : " />
+				</h:column>
+				<h:column>
+					<p:inputText value="#{testBean.document.title}" />
+				</h:column>
+				<h:column>
+					<p:outputLabel value="File : " />
+				</h:column>
+				<h:column>
+					<p:fileUpload fileUploadListener="#{testBean.upload}" auto="true"></p:fileUpload>
+				</h:column>
+			</h:panelGrid>
+			<p:commandButton value="Save" action="#{testBean.save()}"
+				update="messages"></p:commandButton>
+		</p:fieldset>
+	</h:form>
+	<br />
+	
+	<h:form id="form">
+		<p:dataTable var="doc" value="#{allDocumentsBean.documents}">
+			<p:column headerText="Id">
+				<p:outputLabel value="#{doc.id}"></p:outputLabel>
+			</p:column>
+			<p:column headerText="Title">
+				<p:outputLabel value="#{doc.title}"></p:outputLabel>
+			</p:column>
+			<!-- <p:column headerText="Preview">
+				<p:lightBox>
+					<p:commandLink value="Preview" update="messages">
+						<f:setPropertyActionListener value="#{doc}"
+							target="#{allDocumentsBean.selectedDocument}" />
+					</p:commandLink>
+
+					<f:facet name="inline">
+						<p:media value="#{allDocumentsBean.streamedContent}" width="900px"
+							height="700px" player="pdf">
+						</p:media>
+					</f:facet>
+				</p:lightBox>
+			</p:column> -->
+			<p:column>
+				<p:commandLink update=":form:docDetail"
+					oncomplete="PF('docDialog').show()" value="preview">
+				   <f:setPropertyActionListener value="#{doc}"
+						target="#{allDocumentsBean.selectedDocument}" />
+				</p:commandLink>
+
+			</p:column>
+		</p:dataTable>
+
+		<p:dialog header="Doc Info" widgetVar="docDialog" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false">
+			
+		<!-- 	<pe:documentViewer height="700" id="docDetail"  value="#{allDocumentsBean.streamedContent}"></pe:documentViewer> -->
+			
+		  	<p:media id="docDetail" value="#{allDocumentsBean.streamedContent}"
+				width="900px" height="700px" player="pdf">
+				 
+			</p:media>
+ 
+		</p:dialog>
+	</h:form>
+	<p:button value="Page2" outcome="page2"></p:button>
+	<!-- <p:lightBox>
+		<h:outputLink value="#">
+			<h:outputText value="Click Here" />
+		</h:outputLink>
+
+		<f:facet name="inline">
+			<p:media value="/resources/other/guide.pdf" width="900px"
+				height="700px">
+				<h:outputLink value="/resources/other/guide.pdf"></h:outputLink>
+			</p:media>
+		</f:facet>
+	</p:lightBox>
+	<br />
+	<p:lightBox>
+		<h:outputLink value="#">
+			<h:outputText value="Click Here" />
+		</h:outputLink>
+
+		<f:facet name="inline">
+			<p:media value="#{allDocumentsBean.streamedContent}" width="900px"
+				height="700px" player="pdf">
+				<h:outputLink value="/resources/other/guide.pdf"></h:outputLink>
+			</p:media>
+		</f:facet>
+	</p:lightBox>
+
+	<h:form>
+		<p:lightBox>
+			<p:commandLink value="Click Here">
+
+			</p:commandLink>
+
+			<f:facet name="inline">
+				<p:media value="#{allDocumentsBean.streamedContent}" width="900px"
+					height="700px" player="pdf">
+					<h:outputLink value="/resources/other/guide.pdf"></h:outputLink>
+				</p:media>
+			</f:facet>
+		</p:lightBox>
+	</h:form> -->
+</body>
+</html>

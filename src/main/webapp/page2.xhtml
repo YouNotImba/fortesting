@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<h1>Hallo</h1>
+	<h:form id="form">
+		<p:dataTable var="doc" value="#{allDocumentsBean.documents}">
+			<p:column headerText="Id">
+				<p:outputLabel value="#{doc.id}"></p:outputLabel>
+			</p:column>
+			<p:column headerText="Title">
+				<p:outputLabel value="#{doc.title}"></p:outputLabel>
+			</p:column>
+			<!-- <p:column headerText="Preview">
+				<p:lightBox>
+					<p:commandLink value="Preview" update="messages">
+						<f:setPropertyActionListener value="#{doc}"
+							target="#{allDocumentsBean.selectedDocument}" />
+					</p:commandLink>
+
+					<f:facet name="inline">
+						<p:media value="#{allDocumentsBean.streamedContent}" width="900px"
+							height="700px" player="pdf">
+						</p:media>
+					</f:facet>
+				</p:lightBox>
+			</p:column> -->
+			<p:column>
+				<p:commandButton update=":form:title" value="preview">
+					<f:setPropertyActionListener value="#{doc}"
+						target="#{allDocumentsBean.selectedDocument}" />
+				</p:commandButton>
+
+			</p:column>
+		</p:dataTable>
+		<h2>Here title :</h2>
+		<br/>
+		<p:outputLabel id="title"
+			value="#{allDocumentsBean.selectedDocument.title}"></p:outputLabel>
+	</h:form>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<h:outputStylesheet name="css/main.css"></h:outputStylesheet>
+
+
+	<h:form id="form">
+		<h:commandButton value="PDF" actionListener="#{docs.generatePdfReport}" />
+		
+		<h:commandButton value="HTML" actionListener="#{docs.generateHtmlReport}" />
+		
+		<p:dataTable var="doc" value="#{docs.documents}">
+
+			<p:column headerText="Id">
+				<p:outputLabel value="#{doc.id}"></p:outputLabel>
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Title" />
+				</f:facet>
+				<p:outputLabel value="#{doc.title}"></p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Action">
+				<p:commandLink value="Show detail" action="docDetail.xhtml?jsf-redirect=true"
+					actionListener="#{docs.setPdfToSession()}" ajax="false" immediate="true">
+					<f:param name="id" value="#{doc.id}"></f:param>
+				</p:commandLink>
+			</p:column>
+
+			<p:column>
+				<p:commandLink update=":form:docPreview"
+					oncomplete="PF('docDialog').show()"
+					actionListener="#{docs.setPdfToSession()}" value="preview">
+					<f:param name="id" value="#{doc.id}"></f:param>
+				</p:commandLink>
+			</p:column>
+
+		</p:dataTable>
+
+		<p:dialog header="Doc Info" widgetVar="docDialog" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false">
+
+			<!-- 	<pe:documentViewer height="700" id="docDetail"  value="#{allDocumentsBean.streamedContent}"></pe:documentViewer> -->
+
+			<p:media id="docPreview" value="/report.pdf" width="900px"
+				height="700px" player="pdf">
+			</p:media>
+
+		</p:dialog>
+	</h:form>
+</body>
+</html>
