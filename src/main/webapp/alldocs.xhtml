@@ -8,13 +8,19 @@
 <h:head></h:head>
 <body>
 	<h:outputStylesheet name="css/main.css"></h:outputStylesheet>
-
+	<p:growl id="messages"></p:growl>
 
 	<h:form id="form">
-		<h:commandButton value="PDF" actionListener="#{docs.generatePdfReport}" />
-		
-		<h:commandButton value="HTML" actionListener="#{docs.generateHtmlReport}" />
-		
+		<h:commandButton value="PDF"
+			actionListener="#{docs.generatePdfReport}" />
+
+		<p:commandButton value="Create new"
+			update=":addNew"
+						oncomplete="PF('newDoc').show()" />
+			
+		<h:commandButton value="HTML"
+			actionListener="#{docs.generateHtmlReport}" />
+			
 		<p:dataTable var="doc" value="#{docs.documents}">
 
 			<p:column headerText="Id">
@@ -29,13 +35,27 @@
 			</p:column>
 
 			<p:column headerText="Action">
-				<p:commandLink value="Show detail" action="docDetail.xhtml?jsf-redirect=true"
-					actionListener="#{docs.setPdfToSession()}" ajax="false" immediate="true">
+				<p:commandLink value="Show detail"
+					action="docDetail.xhtml?jsf-redirect=true"
+					actionListener="#{docs.setPdfToSession()}" ajax="false"
+					immediate="true">
 					<f:param name="id" value="#{doc.id}"></f:param>
 				</p:commandLink>
 			</p:column>
 
 			<p:column>
+				<p:splitButton value="Actions">
+					<p:menuitem value="delete" actionListener="#{docs.delete()}"
+						update="@form">
+						<f:param name="id" value="#{doc.id}"></f:param>
+					</p:menuitem>
+
+					<p:menuitem update=":form:docPreview"
+						oncomplete="PF('docDialog').show()"
+						actionListener="#{docs.setPdfToSession()}" value="preview">
+						<f:param name="id" value="#{doc.id}"></f:param>
+					</p:menuitem>
+				</p:splitButton>
 				<p:commandLink update=":form:docPreview"
 					oncomplete="PF('docDialog').show()"
 					actionListener="#{docs.setPdfToSession()}" value="preview">
@@ -55,6 +75,31 @@
 			</p:media>
 
 		</p:dialog>
+
+
 	</h:form>
+	<p:dialog header="Save doc" widgetVar="newDoc" modal="true">
+		<h:form id="addNew" enctype="multipart/form-data">
+			<p:fieldset>
+				<h:panelGrid columns="2">
+					<h:column>
+						<p:outputLabel value="Title : " />
+					</h:column>
+					<h:column>
+						<p:inputText value="#{docs.testBean.document.title}" />
+					</h:column>
+					<h:column>
+						<p:outputLabel value="File : " />
+					</h:column>
+					<h:column>
+						<p:fileUpload fileUploadListener="#{docs.testBean.upload}"
+							auto="true"></p:fileUpload>
+					</h:column>
+				</h:panelGrid>
+				<p:commandButton value="Save" action="#{docs.testBean.save()}"
+					update="messages , :form"></p:commandButton>
+			</p:fieldset>
+		</h:form>
+	</p:dialog>
 </body>
 </html>

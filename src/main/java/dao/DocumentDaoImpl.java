@@ -16,4 +16,11 @@ public class DocumentDaoImpl extends GenericJpaDao<Document, Integer> implements
 	public DocumentDaoImpl() {
 		super(Document.class);
 	}
+
+	@Override
+	public void deleteById(int id) {
+		getEm().createQuery("delete from Document d where d.id = :id").setParameter("id", id).executeUpdate();
+
+	}
+
 }

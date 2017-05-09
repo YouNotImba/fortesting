@@ -51,9 +51,22 @@ public class DocumentsTableBean implements Serializable {
 	@Resource(name = "fortest")
 	private DataSource dataSource;
 
+	@Inject
+	private TestBean testBean;
+
 	@PostConstruct
 	public void init() {
 		documents = documentDao.findAll();
+	}
+
+	public void delete() {
+		int id = Integer
+				.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
+		documentDao.deleteById(id);
+		/*
+		 * Document currentDoc = documentDao.finfById(id);
+		 * documentDao.merge(currentDoc); documentDao.delete(currentDoc);
+		 */
 	}
 
 	public void generatePdfReport(ActionEvent event) throws JRException, IOException {
@@ -101,10 +114,19 @@ public class DocumentsTableBean implements Serializable {
 	}
 
 	public List<Document> getDocuments() {
-		return documents;
+		// return documents;
+		return documentDao.findAll();
 	}
 
 	public void setDocuments(List<Document> documents) {
 		this.documents = documents;
+	}
+
+	public TestBean getTestBean() {
+		return testBean;
+	}
+
+	public void setTestBean(TestBean testBean) {
+		this.testBean = testBean;
 	}
 }

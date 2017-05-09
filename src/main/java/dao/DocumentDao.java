@@ -8,4 +8,5 @@ import model.Document;
  */
 public interface DocumentDao extends GenericDao<Document, Integer> {
 
+	void deleteById(int id);
 }
